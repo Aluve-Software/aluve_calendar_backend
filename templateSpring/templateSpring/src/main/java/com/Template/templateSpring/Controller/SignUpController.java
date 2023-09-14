@@ -8,9 +8,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.Template.templateSpring.Entity.User;
-//@RequestMapping(path = "api", produces = MediaType.APPLICATION_JSON_VALUE)
-// For simplicity of this sample, allow all origins. Real applications should configure CORS for their use case.
-
 @RestController
 @RequestMapping("/calendar")
 public class SignUpController {

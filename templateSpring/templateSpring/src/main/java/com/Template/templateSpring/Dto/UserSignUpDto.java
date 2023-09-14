@@ -1,8 +1,27 @@
 package com.Template.templateSpring.Dto;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+
 public class UserSignUpDto {
+
+    @NotEmpty
+    @NotBlank
     private String email;
+
+    @NotEmpty
+    @NotBlank
     private String password;
+
+    public String getConfirmationPassword() {
+        return confirmationPassword;
+    }
+
+    public void setConfirmationPassword(String confirmationPassword) {
+        this.confirmationPassword = confirmationPassword;
+    }
+
+    private String confirmationPassword;
 
     public UserSignUpDto() {
 
