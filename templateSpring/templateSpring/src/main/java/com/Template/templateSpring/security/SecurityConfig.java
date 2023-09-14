@@ -9,6 +9,7 @@
 //import org.springframework.security.oauth2.jwt.*;
 //import org.springframework.security.web.SecurityFilterChain;
 //
+//
 ///**
 // * Configures our application with Spring Security to restrict access to our API endpoints.
 // */
@@ -28,8 +29,8 @@
 //        an OAuth2 Resource Server, using JWT validation.
 //        */
 //        http.authorizeRequests()
-//                .mvcMatchers("/api/private").authenticated()
-//                .mvcMatchers("/api/private-scoped").hasAuthority("SCOPE_read:messages")
+//                .mvcMatchers("(/**").authenticated()
+//                .mvcMatchers("/calendar/siginup").hasAuthority("SCOPE_read:messages")
 //                .and().cors()
 //                .and().oauth2ResourceServer().jwt();
 //        return http.build();

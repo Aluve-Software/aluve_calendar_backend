@@ -1,4 +1,4 @@
-package com.Template.templateSpring.Entity;
+package com.Template.templateSpring.entity;
 
 import jakarta.persistence.*;
 
@@ -8,9 +8,9 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false, unique = true, name = "email")
     private String email;
-    @Column(nullable = false)
+    @Column(nullable = false, name = "password")
     private String password;
 
     public void setId(Integer id) {
