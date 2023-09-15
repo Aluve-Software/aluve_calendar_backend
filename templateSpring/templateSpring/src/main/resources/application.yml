@@ -1,8 +1,0 @@
-#auth0:
-#  audience: http://localhost:8080/signup/
-#spring:
-#  security:
-#    oauth2:
-#      resourceserver:
-#        jwt:
-#          issuer-uri: https://dev-a2y3pt18mov2zkwu.us.auth0.com/
