@@ -47,7 +47,7 @@ public class UserSignUpService implements UserService {
         user = new User();
         emailValidator = new EmailValidator();
         passwordValidator = new PasswordValidator();
-        if(userRepository.existsByEmail(user.getEmail())){
+        if(userRepository.existsByEmail(userSignUpDto.getEmail())){
             return new ResponseEntity<>("User already exists", HttpStatus.BAD_REQUEST);
         }
 
