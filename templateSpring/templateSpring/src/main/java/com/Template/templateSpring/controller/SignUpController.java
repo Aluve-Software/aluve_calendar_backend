@@ -18,8 +18,8 @@ public class SignUpController {
         return userSignUpService.saveUser(userSignUpDto);
     }
 
-    @RequestMapping(value="/confirm-account", method= {RequestMethod.GET, RequestMethod.POST})
-    public ResponseEntity<?> confirmUserAccount(@RequestParam("token")String confirmationToken) {
-        return userSignUpService.confirmEmail(confirmationToken);
+    @RequestMapping(value="/home")
+    public String homePage(@RequestBody UserSignUpDto userSignUpDto) {
+        return "Well come "+userSignUpDto.getEmail();
     }
 }

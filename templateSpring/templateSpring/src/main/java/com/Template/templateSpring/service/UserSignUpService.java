@@ -1,21 +1,20 @@
 package com.Template.templateSpring.service;
 
 import com.Template.templateSpring.dto.UserSignUpDto;
-import com.Template.templateSpring.entity.ConfirmationToken;
 import com.Template.templateSpring.entity.User;
-import com.Template.templateSpring.repository.ConfirmationTokenRepository;
 import com.Template.templateSpring.repository.UserRepository;
 import com.Template.templateSpring.validator.EmailValidator;
 import com.Template.templateSpring.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-//import org.springframework.security.crypto.password.PasswordEncoder;
-import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.net.URI;
 
 @Service("UserSignUpService")
 public class UserSignUpService implements UserService {
@@ -23,8 +22,6 @@ public class UserSignUpService implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
-    ConfirmationTokenRepository confirmationTokenRepository;
 
     @Autowired
     EmailService emailService;
@@ -35,11 +32,11 @@ public class UserSignUpService implements UserService {
 
     private User user;
 
-//    private PasswordEncoder passwordEncoder;
+    private PasswordEncoder passwordEncoder;
 
-    public UserSignUpService(UserRepository userRepository) {
+    public UserSignUpService(UserRepository userRepository, PasswordEncoder passwordEncod) {
         this.userRepository = userRepository;
-//        this.passwordEncoder = passwordEncode;
+        this.passwordEncoder = passwordEncod;
     }
 
     @Override
@@ -61,46 +58,19 @@ public class UserSignUpService implements UserService {
 
         user.setEmail(userSignUpDto.getEmail());
         // encrypt the password using spring security
-        user.setPassword(userSignUpDto.getPassword());
+        user.setPassword(passwordEncoder.encode(userSignUpDto.getPassword()));
         userRepository.save(user);
-
-        ConfirmationToken confirmationToken = new ConfirmationToken(user);
-
-
-        confirmationTokenRepository.save(confirmationToken);
 
         SimpleMailMessage mailMessage = new SimpleMailMessage();
         mailMessage.setTo(user.getEmail());
         mailMessage.setSubject("Complete Registration!");
-        mailMessage.setText("To confirm your account, please click here : "
-                +"http://localhost:8089/confirm-account?token="+confirmationToken.getConfirmationToken());
+        mailMessage.setText("Your Registration is complete!");
         emailService.sendEmail(mailMessage);
 
-        System.out.println("Confirmation Token: " + confirmationToken.getConfirmationToken());
-
-        return ResponseEntity.ok("Verify email by the link sent on your email address");
+        return ResponseEntity.ok("Successfully signed In!");
 
     };
 
-    @Override
-    public ResponseEntity<?> confirmEmail(String confirmationToken) {
-
-        ConfirmationToken token = confirmationTokenRepository.findByConfirmationToken(confirmationToken);
-        if(token != null) {
-            User user = userRepository.findByEmail(token.getUserEntity().getEmail());
-            user.setEnabled(true);
-            userRepository.save(user);
-            return new ResponseEntity<>("Email verified successfully!", HttpStatus.OK);
-        }
-
-        return new ResponseEntity<>("Error: Couldn't verify email", HttpStatus.BAD_REQUEST);
-    }
-
-    private UserSignUpDto mapToUserDto(User user){
-        UserSignUpDto userDto = new UserSignUpDto();
-        userDto.setEmail(user.getEmail());
-        return userDto;
-    }
 
 
 }

@@ -12,6 +12,10 @@ public class UserSignUpDto {
     @NotBlank
     private String password;
 
+    public void setConfirmationPassword(String confirmationPassword) {
+        this.confirmationPassword = confirmationPassword;
+    }
+
     private String confirmationPassword;
 
     public UserSignUpDto() {

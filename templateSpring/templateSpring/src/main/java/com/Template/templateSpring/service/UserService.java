@@ -7,5 +7,5 @@ import java.util.List;
 
 public interface UserService {
     ResponseEntity<?> saveUser(UserSignUpDto userSignUpDto);
-    ResponseEntity<?> confirmEmail(String confirmationToken);
+
 }
