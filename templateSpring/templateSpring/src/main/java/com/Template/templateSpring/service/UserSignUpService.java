@@ -6,22 +6,15 @@ import com.Template.templateSpring.repository.UserRepository;
 import com.Template.templateSpring.validator.EmailValidator;
 import com.Template.templateSpring.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-
-import java.net.URI;
 
 @Service("UserSignUpService")
 public class UserSignUpService implements UserService {
 
     @Autowired
     private UserRepository userRepository;
-
 
     @Autowired
     EmailService emailService;
@@ -34,43 +27,45 @@ public class UserSignUpService implements UserService {
 
     private PasswordEncoder passwordEncoder;
 
-    public UserSignUpService(UserRepository userRepository, PasswordEncoder passwordEncod) {
+    public UserSignUpService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
-        this.passwordEncoder = passwordEncod;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public ResponseEntity<?> saveUser(UserSignUpDto userSignUpDto) {
+    public String saveUser(UserSignUpDto userSignUpDto) {
         user = new User();
         emailValidator = new EmailValidator();
         passwordValidator = new PasswordValidator();
-        if(userRepository.existsByEmail(userSignUpDto.getEmail())){
-            return new ResponseEntity<>("User already exists", HttpStatus.BAD_REQUEST);
+
+        try {
+            if (userRepository.existsByEmail(userSignUpDto.getEmail())) {
+                return "User already exists";
+            }
+
+            if (!emailValidator.validateEmail(userSignUpDto) || emailValidator.emailNull(userSignUpDto)) {
+                return "Your Email is not valid";
+            }
+
+            if (!passwordValidator.validPassword(userSignUpDto) || !passwordValidator.matchingPassword(userSignUpDto)
+                    || passwordValidator.nullPassword(userSignUpDto)) {
+                return "Password not valid";
+            }
+
+            user.setEmail(userSignUpDto.getEmail());
+            user.setPassword(passwordEncoder.encode(userSignUpDto.getPassword()));
+            userRepository.save(user);
+
+            SimpleMailMessage mailMessage = new SimpleMailMessage();
+            mailMessage.setTo(user.getEmail());
+            mailMessage.setSubject("Complete Registration!");
+            mailMessage.setText("Your Registration is complete!");
+            emailService.sendEmail(mailMessage);
+
+            return "Successfully signed In! Redirect to HomePage";
+        } catch (Exception e) {
+            return "An error occurred while processing your request: " + e.getMessage();
         }
-
-        if(!emailValidator.validateEmail(userSignUpDto)){
-            return new ResponseEntity<>("Your Email is not valid", HttpStatus.BAD_REQUEST);
-        }
-
-        if(!passwordValidator.validPassword(userSignUpDto) || !passwordValidator.matchingPassword(userSignUpDto)){
-            return new ResponseEntity<>("Password not valid", HttpStatus.BAD_REQUEST);
-        }
-
-        user.setEmail(userSignUpDto.getEmail());
-        // encrypt the password using spring security
-        user.setPassword(passwordEncoder.encode(userSignUpDto.getPassword()));
-        userRepository.save(user);
-
-        SimpleMailMessage mailMessage = new SimpleMailMessage();
-        mailMessage.setTo(user.getEmail());
-        mailMessage.setSubject("Complete Registration!");
-        mailMessage.setText("Your Registration is complete!");
-        emailService.sendEmail(mailMessage);
-
-        return ResponseEntity.ok("Successfully signed In!");
-
-    };
-
-
+    }
 
 }

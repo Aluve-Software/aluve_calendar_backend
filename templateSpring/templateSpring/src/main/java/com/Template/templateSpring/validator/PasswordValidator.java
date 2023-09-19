@@ -16,4 +16,8 @@ public class PasswordValidator{
         matcher = pattern.matcher(user.getPassword());
         return matcher.matches();
     }
+
+    public boolean nullPassword(UserSignUpDto userSignUpDto){
+        return userSignUpDto.getPassword() == null;
+    }
 }

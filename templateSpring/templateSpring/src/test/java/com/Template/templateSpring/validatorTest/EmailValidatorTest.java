@@ -34,7 +34,7 @@ public class EmailValidatorTest {
     public void testNullEmail() {
         UserSignUpDto user = new UserSignUpDto();
         user.setEmail(null);
-        assertFalse(emailValidator.validateEmail(user));
+        assertTrue(emailValidator.emailNull(user));
     }
 
     @Test

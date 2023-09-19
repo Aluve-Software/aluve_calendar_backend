@@ -14,5 +14,8 @@ public class EmailValidator{
         matcher = pattern.matcher(user.getEmail());
         return matcher.matches();
     }
+    public boolean emailNull(UserSignUpDto user){
+        return user.getEmail() == null;
+    }
 
 }
