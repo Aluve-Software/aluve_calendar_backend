@@ -3,13 +3,9 @@ package com.Template.templateSpring.controller;
 import com.Template.templateSpring.dto.UserSignUpDto;
 import com.Template.templateSpring.service.ResponseMessage;
 import com.Template.templateSpring.service.UserSignUpService;
-import jakarta.persistence.Entity;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 
 @RestController
 @RequestMapping("/calendar")
