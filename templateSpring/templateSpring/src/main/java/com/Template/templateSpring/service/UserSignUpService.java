@@ -7,6 +7,7 @@ import com.Template.templateSpring.validator.EmailValidator;
 import com.Template.templateSpring.validator.PasswordValidator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -27,45 +28,70 @@ public class UserSignUpService implements UserService {
 
     private PasswordEncoder passwordEncoder;
 
+    private String responseCode;
+    private String responseMessage;
+
     public UserSignUpService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
 
     @Override
-    public String saveUser(UserSignUpDto userSignUpDto) {
+    public void saveUser(UserSignUpDto userSignUpDto) {
         user = new User();
         emailValidator = new EmailValidator();
         passwordValidator = new PasswordValidator();
 
         try {
             if (userRepository.existsByEmail(userSignUpDto.getEmail())) {
-                return "User already exists";
+                setResponseMessage("Email Already Exists");
+                setResponseCode("R01");
             }
 
             if (!emailValidator.validateEmail(userSignUpDto) || emailValidator.emailNull(userSignUpDto)) {
-                return "Your Email is not valid";
+                setResponseMessage("Your Email is not valid");
+                setResponseCode("R01");
             }
 
             if (!passwordValidator.validPassword(userSignUpDto) || !passwordValidator.matchingPassword(userSignUpDto)
                     || passwordValidator.nullPassword(userSignUpDto)) {
-                return "Password not valid";
-            }
-
+                setResponseMessage("Password not valid");
+                setResponseCode("R01");
+            };
+            //Saving user to database
             user.setEmail(userSignUpDto.getEmail());
             user.setPassword(passwordEncoder.encode(userSignUpDto.getPassword()));
             userRepository.save(user);
-
+            //Sending email to user
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
             mailMessage.setText("Your Registration is complete!");
             emailService.sendEmail(mailMessage);
+            //Setting message and code
+            setResponseMessage("Successfully Registered!");
+            setResponseCode("R00");
 
-            return "Successfully signed In! Redirect to HomePage";
         } catch (Exception e) {
-            return "An error occurred while processing your request: " + e.getMessage();
+            System.out.println("An error occurred while processing your request: " + e.getMessage());
         }
     }
+
+    public String getResponseMessage() {
+        return responseMessage;
+    }
+
+    public void setResponseMessage(String responseMessage) {
+        this.responseMessage = responseMessage;
+    }
+
+    public String getResponseCode() {
+        return responseCode;
+    }
+
+    public void setResponseCode(String responseCode) {
+        this.responseCode = responseCode;
+    }
+
 
 }
