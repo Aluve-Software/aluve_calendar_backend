@@ -65,7 +65,8 @@ public class UserSignUpService implements UserService {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Complete Registration!");
-            mailMessage.setText("Your Registration is complete!");
+            mailMessage.setText("Your Registration is complete!"+", Go to Home : "
+                    +"http://localhost:8080/calendar/home");
             emailService.sendEmail(mailMessage);
             //Setting message and code
             setResponseMessage("Successfully Registered!");
