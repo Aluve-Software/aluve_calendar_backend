@@ -8,7 +8,7 @@ import org.springframework.scheduling.annotation.Async;
 @Service("emailService")
 public class EmailService {
 
-    private JavaMailSender javaMailSender;
+    private final JavaMailSender javaMailSender;
 
     @Autowired
     public EmailService(JavaMailSender javaMailSender) {
