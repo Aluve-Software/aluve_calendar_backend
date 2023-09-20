@@ -22,10 +22,10 @@ public class SignUpController {
         return responseMessage;
     }
 
-    @GetMapping("/home")
+    @GetMapping("/verifyEmail")
     public ModelAndView homepage(){
         ModelAndView view = new ModelAndView();
-        view.setViewName("welcome");
+        view.setViewName("verifyEmail");
         return view;
     }
 }
