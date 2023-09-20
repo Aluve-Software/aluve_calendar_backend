@@ -15,14 +15,14 @@ public class SignUpController {
     private UserSignUpService userSignUpService;
     private ResponseMessage responseMessage;
 
-    @PostMapping( "/signUp")
+    @PostMapping( "/signup")
     public ResponseMessage signUpUSer(@RequestBody UserSignUpDto userSignUpDto){
         userSignUpService.saveUser(userSignUpDto);
         responseMessage = new ResponseMessage(userSignUpService.getResponseCode(), userSignUpService.getResponseMessage());
         return responseMessage;
     }
 
-    @GetMapping("/verifyEmail")
+    @GetMapping("/verifyemail")
     public ModelAndView homepage(){
         ModelAndView view = new ModelAndView();
         view.setViewName("verifyEmail");

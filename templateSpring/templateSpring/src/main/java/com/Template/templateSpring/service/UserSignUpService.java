@@ -65,7 +65,7 @@ public class UserSignUpService implements UserService {
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
             mailMessage.setSubject("Registration pending!");
-            mailMessage.setText("Click on link to verify email address!"+"http://localhost:8080/calendar/verifyEmail");
+            mailMessage.setText("Click on link to verify email address!"+"http://localhost:8080/calendar/verifyemail");
             emailService.sendEmail(mailMessage);
             //Setting message and code
             setResponseMessage("Successfully registered!");
