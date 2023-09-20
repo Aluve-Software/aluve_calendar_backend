@@ -43,12 +43,12 @@ public class UserSignUpService implements UserService {
 
         try {
             if (userRepository.existsByEmail(userSignUpDto.getEmail())) {
-                setResponseMessage("Email Already Exists");
+                setResponseMessage("Email already exists");
                 setResponseCode("R01");
             }
 
             if (!emailValidator.validateEmail(userSignUpDto) || emailValidator.emailNull(userSignUpDto)) {
-                setResponseMessage("Your Email is not valid");
+                setResponseMessage("Your email is not valid");
                 setResponseCode("R01");
             }
 
@@ -64,12 +64,11 @@ public class UserSignUpService implements UserService {
             //Sending email to user
             SimpleMailMessage mailMessage = new SimpleMailMessage();
             mailMessage.setTo(user.getEmail());
-            mailMessage.setSubject("Complete Registration!");
-            mailMessage.setText("Your Registration is complete!"+", Go to Home : "
-                    +"http://localhost:8080/calendar/home");
+            mailMessage.setSubject("Registration pending!");
+            mailMessage.setText("Click on link to verify email address!"+"http://localhost:8080/calendar/home");
             emailService.sendEmail(mailMessage);
             //Setting message and code
-            setResponseMessage("Successfully Registered!");
+            setResponseMessage("Successfully registered!");
             setResponseCode("R00");
 
         } catch (Exception e) {
