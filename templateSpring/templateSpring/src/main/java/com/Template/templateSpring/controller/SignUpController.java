@@ -28,4 +28,6 @@ public class SignUpController {
         view.setViewName("verifyEmail");
         return view;
     }
+
+    
 }
