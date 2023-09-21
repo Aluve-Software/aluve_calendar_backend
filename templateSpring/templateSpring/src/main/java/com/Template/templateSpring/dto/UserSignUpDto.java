@@ -11,6 +11,7 @@ public class UserSignUpDto {
     @NotEmpty
     @NotBlank
     private String password;
+    private String id;
 
     public void setConfirmationPassword(String confirmationPassword) {
         this.confirmationPassword = confirmationPassword;
@@ -28,6 +29,13 @@ public class UserSignUpDto {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getId() {
+        return id;
+    }
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getPassword() {
