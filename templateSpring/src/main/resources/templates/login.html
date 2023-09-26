@@ -9,7 +9,7 @@
 </head>
 <style>
     .navbar {
-        background-color: cadetblue;
+        background-color: green;
     }
  
 </style>
@@ -19,7 +19,7 @@
     <!-- create navigation bar ( header) -->
     <nav class="navbar navbar-inverse navbar-fixed-top">
         <div class="container">
-            <h1>Oauth2.0</h1>
+            <h1>Calender App</h1>
         </div>
     </nav>
  
@@ -44,9 +44,7 @@
     <h2><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h2>   
 </div>
 
-          <div>
-    <h2><a th:href="@{/oauth2/authorization/github}">Login with GitHub</a></h2>   
-</div>
+
                 <form th:action="@{/login}" method="post" 
                              th:object="${user}">
                    

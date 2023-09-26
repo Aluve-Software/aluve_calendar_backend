@@ -49,7 +49,9 @@ public class ConfigOauth {
                     auth.requestMatchers("/login/**","/registration/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
-                .oauth2Login(withDefaults())
+                .oauth2Login(oauth->{
+                    oauth.loginPage("/login").successHandler(successHandler);
+                })
                 .formLogin(form -> {
                     form.loginPage("/login").successHandler(successHandler);
                 })

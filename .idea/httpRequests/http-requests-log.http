@@ -1,3 +1,13 @@
+POST http://localhost:8080/login
+Connection: Keep-Alive
+User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
+Cookie: __Host-GAPS=1:ApGLoivEGjS_56D3Nc7ExmsX3XVI7w:F3iMeFD9tEiu0Zfb
+Accept-Encoding: br,deflate,gzip,x-gzip
+
+<> 2023-09-26T030205.200.html
+
+###
+
 GET http://localhost:8080/dashboard
 Connection: Keep-Alive
 User-Agent: Apache-HttpClient/4.5.14 (Java/17.0.8)
