@@ -19,9 +19,6 @@ public class UserSignUpService implements UserService {
     @Autowired
     EmailService emailService;
 
-    @Autowired
-    UserService userService;
-
     private EmailValidator emailValidator;
 
     private PasswordValidator passwordValidator;
@@ -77,7 +74,6 @@ public class UserSignUpService implements UserService {
         } catch (Exception e) {
             System.out.println("An error occurred while processing your request: " + e.getMessage());
         }
-
     }
 
     public String getResponseMessage() {
