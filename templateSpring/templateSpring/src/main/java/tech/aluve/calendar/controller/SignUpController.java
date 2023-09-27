@@ -2,7 +2,7 @@ package tech.aluve.calendar.controller;
 
 import tech.aluve.calendar.dto.UserSignUpDto;
 import tech.aluve.calendar.service.ResponseMessage;
-import tech.aluve.calendar.service.UserSignUpService;
+import tech.aluve.calendar.service.UserSignUpServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
@@ -12,7 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class SignUpController {
 
     @Autowired
-    private UserSignUpService userSignUpService;
+    private UserSignUpServiceImpl userSignUpService;
     private ResponseMessage responseMessage;
 
     @PostMapping( "/signup")

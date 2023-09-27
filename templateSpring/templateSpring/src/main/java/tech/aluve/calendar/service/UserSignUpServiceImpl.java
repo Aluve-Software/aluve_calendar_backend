@@ -2,6 +2,7 @@ package tech.aluve.calendar.service;
 
 import tech.aluve.calendar.dto.UserSignUpDto;
 import tech.aluve.calendar.entity.User;
+import tech.aluve.calendar.interfaces.UserService;
 import tech.aluve.calendar.repository.UserRepository;
 import tech.aluve.calendar.validator.EmailValidator;
 import tech.aluve.calendar.validator.PasswordValidator;
@@ -13,9 +14,9 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service("UserSignUpService")
-public class UserSignUpService implements UserService {
+public class UserSignUpServiceImpl implements UserService {
 
-    Logger logger = LoggerFactory.getLogger(UserSignUpService .class);
+    Logger logger = LoggerFactory.getLogger(UserSignUpServiceImpl.class);
     @Autowired
     private UserRepository userRepository;
 
@@ -33,7 +34,7 @@ public class UserSignUpService implements UserService {
     private String responseCode;
     private String responseMessage;
 
-    public UserSignUpService(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserSignUpServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
     }
