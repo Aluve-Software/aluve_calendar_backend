@@ -1,10 +1,16 @@
 package com.Template.templateSpring.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name="users")
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +21,6 @@ public class User {
     @Getter
     @Column(nullable = false, name = "password")
     private String password;
-
 
     public void setId(Integer id) {
         this.id = id;

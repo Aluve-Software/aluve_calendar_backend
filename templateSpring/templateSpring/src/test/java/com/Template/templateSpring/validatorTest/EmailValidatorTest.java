@@ -20,41 +20,41 @@ public class EmailValidatorTest {
     public void testValidEmail() {
         UserSignUpDto user = new UserSignUpDto();
         user.setEmail("valid.email@example.com");
-        assertTrue(emailValidator.validateEmail(user));
+        assertTrue(emailValidator.validateEmail(user.getEmail()));
     }
 
     @Test
     public void testInvalidEmail() {
         UserSignUpDto user = new UserSignUpDto();
         user.setEmail("invalid-email");
-        assertFalse(emailValidator.validateEmail(user));
+        assertFalse(emailValidator.validateEmail(user.getEmail()));
     }
 
     @Test
     public void testNullEmail() {
         UserSignUpDto user = new UserSignUpDto();
         user.setEmail(null);
-        assertTrue(emailValidator.emailNull(user));
+        assertTrue(emailValidator.emailNull(user.getEmail()));
     }
 
     @Test
     public void testEmptyEmail() {
         UserSignUpDto user = new UserSignUpDto();
         user.setEmail("");
-        assertFalse(emailValidator.validateEmail(user));
+        assertFalse(emailValidator.validateEmail(user.getEmail()));
     }
 
     @Test
     public void testTooLongEmail() {
         UserSignUpDto user = new UserSignUpDto();
         user.setEmail("a".repeat(51) + "@example.com");
-        assertFalse(emailValidator.validateEmail(user));
+        assertFalse(emailValidator.validateEmail(user.getEmail()));
     }
 
     @Test
     public void testMaxLengthEmail() {
         UserSignUpDto user = new UserSignUpDto();
         user.setEmail("a".repeat(38) + "@example.com");
-        assertTrue(emailValidator.validateEmail(user));
+        assertTrue(emailValidator.validateEmail(user.getEmail()));
     }
 }

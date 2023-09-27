@@ -5,6 +5,9 @@ import com.Template.templateSpring.entity.User;
 import com.Template.templateSpring.repository.UserRepository;
 import com.Template.templateSpring.validator.EmailValidator;
 import com.Template.templateSpring.validator.PasswordValidator;
+
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,7 +22,6 @@ public class UserSignUpService implements UserService {
     @Autowired
     EmailService emailService;
 
-    @Autowired
     UserService userService;
 
     private EmailValidator emailValidator;
@@ -50,7 +52,7 @@ public class UserSignUpService implements UserService {
                 setResponseCode("R01");
             }
 
-            if (!emailValidator.validateEmail(userSignUpDto) || emailValidator.emailNull(userSignUpDto)) {
+            if (!emailValidator.validateEmail(userSignUpDto.getEmail()) || emailValidator.emailNull(userSignUpDto.getEmail())) {
                 setResponseMessage("Your email is not valid");
                 setResponseCode("R01");
             }
@@ -96,5 +98,7 @@ public class UserSignUpService implements UserService {
         this.responseCode = responseCode;
     }
 
-
+    public Optional<User> getUserById(Long id) {
+        return userRepository.findById(id);
+    }
 }

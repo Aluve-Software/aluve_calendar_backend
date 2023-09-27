@@ -32,13 +32,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests( auth -> {
                     auth.requestMatchers("/home/v1").permitAll();
                     auth.requestMatchers("/calendar/signup").permitAll();
+                    auth.requestMatchers("/event/create").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(withDefaults())
                 .formLogin(withDefaults())
                 .build();
     }
-
-
-
 }
