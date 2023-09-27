@@ -1,0 +1,3 @@
+2023-09-27 14:55:41,669 ERROR t.a.c.CalendarApp [main] Error log message
+2023-09-27 14:55:59,124 ERROR o.h.e.j.s.SqlExceptionHelper [http-nio-8080-exec-1] ERROR: permission denied for table users
+2023-09-27 14:56:12,551 ERROR o.h.e.j.s.SqlExceptionHelper [http-nio-8080-exec-3] ERROR: permission denied for table users
