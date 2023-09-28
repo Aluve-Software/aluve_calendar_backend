@@ -2,8 +2,8 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="ISO-8859-1">
-    
-<link rel="stylesheet" 
+
+<link rel="stylesheet"
  href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
 
 </head>
@@ -11,7 +11,7 @@
     .navbar {
         background-color: green;
     }
- 
+
 </style>
 
 <body >
@@ -22,15 +22,15 @@
             <h1>Calender App</h1>
         </div>
     </nav>
- 
-    
-    
-    
+
+
+
+
 
     <br><br><br><br><br><br><br>
     <div class="container">
-    
-    
+
+
         <div class="row">
             <div class="col-md-6 col-md-offset-3">
 
@@ -39,30 +39,30 @@
                 </div>
 
                 <h1>Login</h1>
-                
+
                 <div>
-    <h2><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h2>   
+    <h2><a th:href="@{/oauth2/authorization/google}">Login with Google</a></h2>
 </div>
 
 
-                <form th:action="@{/login}" method="post" 
+                <form th:action="@{/login}" method="post"
                              th:object="${user}">
-                   
+
 
 
                     <div class="form-group">
-                        <label class="control-label" for="email"> Email 
+                        <label class="control-label" for="email"> Email
                          </label> <input id="email" class="form-control"
-                            th:field="*{username}" required autofocus="autofocus" 
+                            th:field="*{username}" required autofocus="autofocus"
                                 />
                     </div>
-                    
-                   
+
+
 
                     <div class="form-group">
-                        <label class="control-label" for="password"> 
+                        <label class="control-label" for="password">
                            Password </label> <input id="password"
-                            class="form-control" type="password" 
+                            class="form-control" type="password"
                           th:field="*{password}" required
                             autofocus="autofocus" />
                     </div>
@@ -70,14 +70,14 @@
                     <div class="form-group">
                         <button type="submit" class="btn btn-primary">
                           Log In </button>
-                        <span>New User? <a href="/" 
-                  th:href="@{/registration}">Register
+                        <span>New User? <a href="/"
+                  th:href="@{/calendar/signup}">Register
                                 here</a></span>
                     </div>
                 </form>
             </div>
         </div>
     </div>
-       
+
 </body>
 </html>

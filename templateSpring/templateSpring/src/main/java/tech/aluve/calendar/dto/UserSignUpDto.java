@@ -12,17 +12,13 @@ public class UserSignUpDto {
     @NotBlank
     private String password;
 
-
-
     private String name;
     private String email_id;
 
     String role;
 
-    public void setConfirmationPassword(String confirmationPassword) {
-        this.confirmationPassword = confirmationPassword;
-    }
-
+    @NotEmpty
+    @NotBlank
     private String confirmationPassword;
 
     public UserSignUpDto() {
@@ -43,6 +39,10 @@ public class UserSignUpDto {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setConfirmationPassword(String confirmationPassword) {
+        this.confirmationPassword = confirmationPassword;
     }
 
     public String getConfirmationPassword() {

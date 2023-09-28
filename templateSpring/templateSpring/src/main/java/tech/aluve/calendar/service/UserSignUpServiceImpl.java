@@ -49,31 +49,28 @@ public class UserSignUpServiceImpl implements UserService {
             if (userRepository.existsByEmail(userSignUpDto.getEmail())) {
                 setResponseMessage("Email already exists");
                 setResponseCode("R01");
-            }
-
-            if (!emailValidator.validateEmail(userSignUpDto) || emailValidator.emailNull(userSignUpDto)) {
+            }else if (!emailValidator.validateEmail(userSignUpDto) || emailValidator.emailNull(userSignUpDto)) {
                 setResponseMessage("Your email is not valid");
                 setResponseCode("R01");
-            }
-
-            if (!passwordValidator.validPassword(userSignUpDto) || !passwordValidator.matchingPassword(userSignUpDto)
+            }else if (!passwordValidator.validPassword(userSignUpDto) || !passwordValidator.matchingPassword(userSignUpDto)
                     || passwordValidator.nullPassword(userSignUpDto)) {
                 setResponseMessage("Password not valid");
                 setResponseCode("R01");
-            };
-            //Saving user to database
-            user.setEmail(userSignUpDto.getEmail());
-            user.setPassword(passwordEncoder.encode(userSignUpDto.getPassword()));
-            userRepository.save(user);
-            //Sending email to user
-            SimpleMailMessage mailMessage = new SimpleMailMessage();
-            mailMessage.setTo(user.getEmail());
-            mailMessage.setSubject("Registration pending!");
-            mailMessage.setText("Click on link to verify email address!"+"http://localhost:8080/calendar/verifyemail");
-            emailService.sendEmail(mailMessage);
-            //Setting message and code
-            setResponseMessage("Successfully registered!");
-            setResponseCode("R00");
+            }else {
+                //Saving user to database
+                user.setEmail(userSignUpDto.getEmail());
+                user.setPassword(passwordEncoder.encode(userSignUpDto.getPassword()));
+                userRepository.save(user);
+                //Sending email to user
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(user.getEmail());
+                mailMessage.setSubject("Registration pending!");
+                mailMessage.setText("Click on link to verify email address!"+"http://localhost:8080/calendar/verifyemail");
+                emailService.sendEmail(mailMessage);
+                //Setting message and code
+                setResponseMessage("Successfully registered!");
+                setResponseCode("R00");
+            }
 
             logger.debug("Debug log message");
             logger.info("Info log message");
