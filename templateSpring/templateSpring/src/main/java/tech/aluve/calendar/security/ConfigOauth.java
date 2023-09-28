@@ -46,7 +46,7 @@ public class ConfigOauth {
     SecurityFilterChain securityFilterChainFilterChain (HttpSecurity httpSecurity) throws Exception {
         return httpSecurity
                 .authorizeHttpRequests( auth -> {
-                    auth.requestMatchers("/login/**","/registration/**").permitAll();
+                    auth.requestMatchers("/login/**","/signup/**").permitAll();
                     auth.anyRequest().authenticated();
                 })
                 .oauth2Login(oauth->{
