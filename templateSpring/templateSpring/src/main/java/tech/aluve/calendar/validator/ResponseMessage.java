@@ -1,4 +1,4 @@
-package tech.aluve.calendar.service;
+package tech.aluve.calendar.validator;
 
 
 public class ResponseMessage {
