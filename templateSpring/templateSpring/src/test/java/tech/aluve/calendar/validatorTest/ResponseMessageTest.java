@@ -1,7 +1,8 @@
-package tech.aluve.calendar.service;
+package tech.aluve.calendar.validatorTest;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import tech.aluve.calendar.validator.ResponseMessage;
 
 import static org.junit.jupiter.api.Assertions.*;
 

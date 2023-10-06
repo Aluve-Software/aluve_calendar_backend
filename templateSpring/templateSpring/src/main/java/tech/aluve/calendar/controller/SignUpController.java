@@ -1,7 +1,7 @@
 package tech.aluve.calendar.controller;
 
 import tech.aluve.calendar.dto.UserSignUpDto;
-import tech.aluve.calendar.service.ResponseMessage;
+import tech.aluve.calendar.validator.ResponseMessage;
 import tech.aluve.calendar.service.UserSignUpServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
