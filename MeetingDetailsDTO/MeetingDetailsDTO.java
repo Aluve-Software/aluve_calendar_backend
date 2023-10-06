@@ -27,7 +27,7 @@ public class MeetingDetailsDTO {
 
     // Getters
     public Long getId() {
-       return id; 
+        return id;
     }
 
     public String getTitle() {
@@ -52,5 +52,34 @@ public class MeetingDetailsDTO {
 
     public MeetingStatus getStatus() {
         return status;
+    }
+
+    // Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
+    }
+
+    public void setParticipants(List<String> participants) {
+        this.participants = participants;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setStatus(MeetingStatus status) {
+        this.status = status;
     }
 }
