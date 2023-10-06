@@ -1,3 +1,6 @@
+import java.time.LocalDateTime;
+import java.util.List;
+
 public class MeetingDetailsDTO {
     private Long id;
     private String title;
@@ -12,7 +15,7 @@ public class MeetingDetailsDTO {
     }
 
     // Parameterized constructor
-    public MeetingDetailsDTO(Lond id, String title, LocalDateTime dateTime, List<String> participants, String location, String description, MeetingStatus status) {
+    public MeetingDetailsDTO(Long id, String title, LocalDateTime dateTime, List<String> participants, String location, String description, MeetingStatus status) {
         this.id = id;
         this.title = title;
         this.dateTime = dateTime;
@@ -20,5 +23,34 @@ public class MeetingDetailsDTO {
         this.location = location;
         this.description = description;
         this.status = status;
+    }
+
+    // Getters
+    public Long getId() {
+       return id; 
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public LocalDateTime getDateTime() {
+        return dateTime;
+    }
+
+    public List<String> getParticipants() {
+        return participants;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public MeetingStatus getStatus() {
+        return status;
     }
 }
