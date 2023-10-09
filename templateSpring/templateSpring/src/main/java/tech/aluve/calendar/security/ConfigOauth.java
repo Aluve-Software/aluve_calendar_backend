@@ -62,7 +62,7 @@ public class ConfigOauth {
 
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
-        return (web) -> web.ignoring().requestMatchers("/calendar/**");
+        return (web) -> web.ignoring().requestMatchers("/calendar/**","/passwordreset/permission");
     }
 }
 
