@@ -26,6 +26,18 @@ public class MeetingService {
 
         if (optionalMeeting.isPresent()) {
             Meeting meeting = optionalMeeting.get();
+            MeetingDetailsDTO meetingDetailsDTO = new MeetingDetailsDTO();
+            
+            // Map the meeting properties to the DTO
+            meetingDetailsDTO.setId(meeting.getId());
+            meetingDetailsDTO.setTitle((String) meeting.getTitle());
+            meetingDetailsDTO.setDateTime((LocalDateTime) meeting.getDateTime());
+            meetingDetailsDTO.setParticipants(meeting.getParticipants());
+            meetingDetailsDTO.setLocation(meeting.getLocation());
+            meetingDetailsDTO.setDescription(meeting.getDescription());
+            meetingDetailsDTO.setStatus(meeting.getStatus());
+
+            return meetingDetailsDTO;
         }
     }
     
