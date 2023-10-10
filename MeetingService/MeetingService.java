@@ -22,7 +22,7 @@ public class MeetingService {
     }
 
     public MeetingDetailsDTO getMeetingDetails(Long meetingId) {
-        Optional<Meeting> optionalMeeting = ((Object) meetingRepository).findById(meetingId);
+        Optional<Meeting> optionalMeeting = meetingRepository.findById(meetingId);
 
         if (optionalMeeting.isPresent()) {
             Meeting meeting = optionalMeeting.get();
@@ -38,7 +38,8 @@ public class MeetingService {
             meetingDetailsDTO.setStatus(meeting.getStatus());
 
             return meetingDetailsDTO;
+        } else {
+            throw new MeetingNotFoundException("Meeting with ID " + meetingId + " not found.");
         }
-    }
-    
+    } 
 }
