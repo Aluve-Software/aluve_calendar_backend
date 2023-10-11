@@ -1,10 +1,8 @@
 package tech.aluve.calendar.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.data.repository.query.Param;
+import org.springframework.web.bind.annotation.*;
 import tech.aluve.calendar.dto.UserSignUpDto;
 import tech.aluve.calendar.security.JwtToken;
 import tech.aluve.calendar.service.PasswordResetServiceImpl;
@@ -27,8 +25,9 @@ public class PasswordResetController {
     }
 
     @PostMapping("/newpassword")
-    public ResponseMessage newPassword(@RequestBody UserSignUpDto userPasswordReset){
-//        passwordResetServiceImpl.authenticateUser(userPasswordReset);
+    public ResponseMessage newPassword(@RequestParam("token")String userToken, @RequestBody UserSignUpDto userPasswordReset){
+        passwordResetServiceImpl.resetPassword(userToken, userPasswordReset);
+        responseMessage = new ResponseMessage(passwordResetServiceImpl.getPasswordResponseCode(), passwordResetServiceImpl.getPasswordResponseMessage());
         return new ResponseMessage("r001", "new password reset ");
     }
 }

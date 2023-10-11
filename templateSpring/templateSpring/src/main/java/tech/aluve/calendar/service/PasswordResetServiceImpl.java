@@ -79,6 +79,8 @@ public class PasswordResetServiceImpl implements PasswordResetService {
                 }else {
                     user.setPassword(passwordEncoder.encode(newUserPassword.getPassword()));
                     userRepository.save(user);
+                    setPasswordResponseMessage("Password successfully updated");
+                    setPasswordResponseCode("R00");
 
                 }
             }
