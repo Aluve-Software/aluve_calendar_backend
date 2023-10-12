@@ -37,7 +37,7 @@ public class JwtToken {
     }
 
     private Claims parseJwtClaims(String token){
-        return jwtParser.parseClaimsJwt(token).getBody();
+        return jwtParser.parseClaimsJws(token).getBody();
     }
 
     public Claims resolveClaims(HttpServletRequest servRequest){

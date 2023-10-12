@@ -12,6 +12,8 @@ import tech.aluve.calendar.repository.UserRepository;
 import tech.aluve.calendar.security.JwtToken;
 import tech.aluve.calendar.validator.PasswordValidator;
 
+import javax.naming.AuthenticationException;
+
 @Service("PasswordResetServiceImpl")
 public class PasswordResetServiceImpl implements PasswordResetService {
 
@@ -29,6 +31,8 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     private JwtToken token;
 
+    private String generatedToken;
+
     private String passwordResponseCode;
     private String passwordResponseMessage;
 
@@ -41,6 +45,8 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     @Override
     public void authenticateUser(UserSignUpDto userPasswordReset) {
         user = new User();
+        String newToken = token.createToken(user);
+        user.setResetToken(newToken);
 
         passwordValidator = new PasswordValidator();
         try {
@@ -49,7 +55,7 @@ public class PasswordResetServiceImpl implements PasswordResetService {
                 SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
                 simpleMailMessage.setTo(user.getEmail());
                 simpleMailMessage.setSubject("Pending password reset");
-                simpleMailMessage.setText("Click on link to reset your password!"+"http://localhost:8080/passwordreset/newpassword?token="+token.createToken(user));
+                simpleMailMessage.setText("Click on link to reset your password!"+"http://localhost:8080/passwordreset/verifytoken?token="+newToken);
                 emailService.sendEmail(simpleMailMessage);
                 //Setting message and code
                 setPasswordResponseMessage("Successfully Authenticated!");
@@ -65,24 +71,33 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     }
 
     @Override
-    public void resetPassword(String userToken, UserSignUpDto newUserPassword){
-        try {
-            if(token.validateClaims(userToken)){
-                setPasswordResponseMessage("Token has Expired");
-                setPasswordResponseCode("R01");
-            }else{
-                User user = userRepository.findByResetToken(userToken);
-                if (!passwordValidator.validPassword(newUserPassword) || !passwordValidator.matchingPassword(newUserPassword)
-                        || passwordValidator.nullPassword(newUserPassword)) {
-                    setPasswordResponseMessage("Password not valid");
-                    setPasswordResponseCode("R01");
-                }else {
-                    user.setPassword(passwordEncoder.encode(newUserPassword.getPassword()));
-                    userRepository.save(user);
-                    setPasswordResponseMessage("Password successfully updated");
-                    setPasswordResponseCode("R00");
+    public void validateToken(String userToken) throws AuthenticationException {
+        setGeneratedToken(userToken);
+        if(!token.validateClaims(userToken)){
+            setPasswordResponseMessage("Token has Expired");
+            setPasswordResponseCode("R01");
+        }else {
+            setPasswordResponseMessage("Token Valid and Redirected to password reset page");
+            setPasswordResponseCode("R00");
+        }
 
-                }
+    }
+
+    @Override
+    public void resetPassword(UserSignUpDto newUserPassword){
+        try {
+            passwordValidator = new PasswordValidator();
+            User user = userRepository.findByResetToken(getGeneratedToken());
+            if (!passwordValidator.validPassword(newUserPassword) || !passwordValidator.matchingPassword(newUserPassword)
+                    || passwordValidator.nullPassword(newUserPassword)) {
+                setPasswordResponseMessage("Password not valid");
+                setPasswordResponseCode("R01");
+            }else {
+                user.setPassword(passwordEncoder.encode(newUserPassword.getPassword()));
+                userRepository.save(user);
+                setPasswordResponseMessage("Password successfully updated");
+                setPasswordResponseCode("R00");
+
             }
         }catch (Exception e){
             System.out.println("An error occurred while processing your request: " + e.getMessage());
@@ -104,6 +119,14 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     public void setPasswordResponseMessage(String passwordResponseMessage) {
         this.passwordResponseMessage = passwordResponseMessage;
+    }
+
+    private String getGeneratedToken() {
+        return generatedToken;
+    }
+
+    private void setGeneratedToken(String generatedToken) {
+        this.generatedToken = generatedToken;
     }
 
 
