@@ -8,7 +8,7 @@ import tech.aluve.calendar.dto.LoginDTO;
 import tech.aluve.calendar.interfaces.OauthUserService;
 import tech.aluve.calendar.repository.UserRepository;
 
-@CrossOrigin
+@CrossOrigin(origins = "*")
 @Controller
 @RequestMapping("/login")
 public class LoginController {
