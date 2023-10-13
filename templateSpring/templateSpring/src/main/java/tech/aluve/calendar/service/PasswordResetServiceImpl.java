@@ -1,17 +1,15 @@
 package tech.aluve.calendar.service;
 
-import io.jsonwebtoken.Claims;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import tech.aluve.calendar.dto.UserSignUpDto;
 import tech.aluve.calendar.entity.User;
 import tech.aluve.calendar.interfaces.PasswordResetService;
 import tech.aluve.calendar.repository.UserRepository;
 import tech.aluve.calendar.security.JwtToken;
 import tech.aluve.calendar.validator.PasswordValidator;
-
 import javax.naming.AuthenticationException;
 
 @Service("PasswordResetServiceImpl")
@@ -19,20 +17,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     @Autowired
     private UserRepository userRepository;
-
     @Autowired
     EmailService emailService;
-
     private PasswordValidator passwordValidator;
-
     private PasswordEncoder passwordEncoder;
-
-    private User user;
-
     private JwtToken token;
-
-    private String generatedToken;
-
+    private String userEmail;
     private String passwordResponseCode;
     private String passwordResponseMessage;
 
@@ -43,19 +33,20 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     }
 
     @Override
-    public void authenticateUser(UserSignUpDto userPasswordReset) {
-        user = new User();
-        String newToken = token.createToken(user);
-        user.setResetToken(newToken);
-
+    public void authenticateUser(String userEmail, HttpServletRequest servRequest) {
+        String schemeName = servRequest.getScheme();
+        String serverName = servRequest.getServerName();
         passwordValidator = new PasswordValidator();
         try {
-            if(userRepository.existsByEmail(userPasswordReset.getEmail())){
-                user.setEmail(userPasswordReset.getEmail());
+            if(userRepository.existsByEmail(userEmail)){
+                User user = userRepository.findByEmail(userEmail);
+                String newToken = token.createToken(user);
+                setUserEmail(userEmail);
+                user.setEmail(userEmail);
                 SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
                 simpleMailMessage.setTo(user.getEmail());
                 simpleMailMessage.setSubject("Pending password reset");
-                simpleMailMessage.setText("Click on link to reset your password!"+"http://localhost:8080/passwordreset/verifytoken?token="+newToken);
+                simpleMailMessage.setText("Click on link to reset your password!"+schemeName+"://"+serverName+"/passwordreset/verifytoken?token="+newToken);
                 emailService.sendEmail(simpleMailMessage);
                 //Setting message and code
                 setPasswordResponseMessage("Successfully Authenticated!");
@@ -72,7 +63,6 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
     @Override
     public void validateToken(String userToken) throws AuthenticationException {
-        setGeneratedToken(userToken);
         if(!token.validateClaims(userToken)){
             setPasswordResponseMessage("Token has Expired");
             setPasswordResponseCode("R01");
@@ -84,16 +74,17 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     }
 
     @Override
-    public void resetPassword(UserSignUpDto newUserPassword){
+    public void resetPassword(String newPass, String confirmPass){
         try {
             passwordValidator = new PasswordValidator();
-            User user = userRepository.findByResetToken(getGeneratedToken());
-            if (!passwordValidator.validPassword(newUserPassword) || !passwordValidator.matchingPassword(newUserPassword)
-                    || passwordValidator.nullPassword(newUserPassword)) {
+            User user = userRepository.findByEmail(getUserEmail());
+            System.out.println(getUserEmail());
+            if (!passwordValidator.passwordValid(newPass) || !passwordValidator.Passwordsmatch(newPass, confirmPass, user)
+                    || passwordValidator.passwordNull(newPass, confirmPass)) {
                 setPasswordResponseMessage("Password not valid");
                 setPasswordResponseCode("R01");
             }else {
-                user.setPassword(passwordEncoder.encode(newUserPassword.getPassword()));
+                user.setPassword(passwordEncoder.encode(newPass));
                 userRepository.save(user);
                 setPasswordResponseMessage("Password successfully updated");
                 setPasswordResponseCode("R00");
@@ -121,12 +112,13 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         this.passwordResponseMessage = passwordResponseMessage;
     }
 
-    private String getGeneratedToken() {
-        return generatedToken;
+
+    public String getUserEmail() {
+        return userEmail;
     }
 
-    private void setGeneratedToken(String generatedToken) {
-        this.generatedToken = generatedToken;
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
 
 

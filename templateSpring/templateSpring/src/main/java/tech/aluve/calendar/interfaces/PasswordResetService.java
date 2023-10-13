@@ -1,12 +1,11 @@
 package tech.aluve.calendar.interfaces;
 
-import tech.aluve.calendar.dto.UserSignUpDto;
-import tech.aluve.calendar.security.JwtToken;
+import jakarta.servlet.http.HttpServletRequest;
 
 import javax.naming.AuthenticationException;
 
 public interface PasswordResetService {
-    void authenticateUser(UserSignUpDto userPasswordResetDTO);
+    void authenticateUser(String userEmail, HttpServletRequest servRequest);
     void validateToken(String userToken) throws AuthenticationException;
-    void resetPassword(UserSignUpDto newUserPassword);
+    void resetPassword(String newPass, String confirmPass);
 }
