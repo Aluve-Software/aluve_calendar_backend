@@ -1,16 +1,10 @@
 package tech.aluve.calendar.controller;
 
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
 import org.springframework.web.bind.annotation.*;
-import tech.aluve.calendar.dto.UserSignUpDto;
-import tech.aluve.calendar.entity.User;
-import tech.aluve.calendar.security.JwtToken;
 import tech.aluve.calendar.service.PasswordResetServiceImpl;
 import tech.aluve.calendar.validator.ResponseMessage;
-
 import javax.naming.AuthenticationException;
 
 @RestController

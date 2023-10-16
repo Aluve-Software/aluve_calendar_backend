@@ -22,20 +22,23 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     private PasswordValidator passwordValidator;
     private PasswordEncoder passwordEncoder;
     private JwtToken token;
-    private String userEmail;
+    private String emailFromUser;
     private String passwordResponseCode;
     private String passwordResponseMessage;
 
-    public PasswordResetServiceImpl (PasswordEncoder encodepassword, UserRepository userRepo, JwtToken jwtToken){
+    public PasswordResetServiceImpl (PasswordEncoder encodepassword, UserRepository userRepo, JwtToken jwtToken, EmailService userEmailService){
         this.passwordEncoder = encodepassword;
         this.userRepository = userRepo;
         this.token = jwtToken;
+        this.emailService = userEmailService;
     }
 
     @Override
-    public void authenticateUser(String userEmail, HttpServletRequest servRequest) {
+    public void authenticateUser(String email, HttpServletRequest servRequest) {
         String schemeName = servRequest.getScheme();
         String serverName = servRequest.getServerName();
+        String userEmail = email;
+        System.out.println(email);
         passwordValidator = new PasswordValidator();
         try {
             if(userRepository.existsByEmail(userEmail)){
@@ -114,11 +117,11 @@ public class PasswordResetServiceImpl implements PasswordResetService {
 
 
     public String getUserEmail() {
-        return userEmail;
+        return emailFromUser;
     }
 
     public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
+        this.emailFromUser = userEmail;
     }
 
 

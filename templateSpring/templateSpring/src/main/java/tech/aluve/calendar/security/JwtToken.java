@@ -4,11 +4,8 @@ import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import tech.aluve.calendar.entity.User;
-
 import javax.naming.AuthenticationException;
-import java.sql.Time;
 import java.util.Date;
-import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 @Component
