@@ -1,11 +1,14 @@
 import java.time.LocalDateTime;
 import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
 @Service
 public class MeetingService {
 
     @Autowired
-    private Object meetingRepository;
+    private MeetingRepository meetingRepository;
 
     public Meeting createMeeting(Meeting meeting) {
         if (meeting.getTitle() == null || meeting.getDateTime() == null) {
