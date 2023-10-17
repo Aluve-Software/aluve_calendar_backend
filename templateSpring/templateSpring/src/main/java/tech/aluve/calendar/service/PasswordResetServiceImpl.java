@@ -1,6 +1,8 @@
 package tech.aluve.calendar.service;
 
 import jakarta.servlet.http.HttpServletRequest;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +16,8 @@ import javax.naming.AuthenticationException;
 
 @Service("PasswordResetServiceImpl")
 public class PasswordResetServiceImpl implements PasswordResetService {
+
+    Logger logger = LoggerFactory.getLogger(PasswordResetServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
@@ -30,7 +34,6 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         this.passwordEncoder = encodepassword;
         this.userRepository = userRepo;
         this.token = jwtToken;
-        this.emailService = userEmailService;
     }
 
     @Override
@@ -38,7 +41,6 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         String schemeName = servRequest.getScheme();
         String serverName = servRequest.getServerName();
         String userEmail = email;
-        System.out.println(email);
         passwordValidator = new PasswordValidator();
         try {
             if(userRepository.existsByEmail(userEmail)){
@@ -54,6 +56,12 @@ public class PasswordResetServiceImpl implements PasswordResetService {
                 //Setting message and code
                 setPasswordResponseMessage("Successfully Authenticated!");
                 setPasswordResponseCode("R00");
+
+                logger.debug("Debug log message");
+                logger.info("Info log message");
+                logger.error("Error log message");
+                logger.warn("Warn log message");
+                logger.trace("Trace log message");
             }else{
                 setPasswordResponseMessage("Please register first!");
                 setPasswordResponseCode("R01");
@@ -81,7 +89,6 @@ public class PasswordResetServiceImpl implements PasswordResetService {
         try {
             passwordValidator = new PasswordValidator();
             User user = userRepository.findByEmail(getUserEmail());
-            System.out.println(getUserEmail());
             if (!passwordValidator.passwordValid(newPass) || !passwordValidator.Passwordsmatch(newPass, confirmPass, user)
                     || passwordValidator.passwordNull(newPass, confirmPass)) {
                 setPasswordResponseMessage("Password not valid");
@@ -93,6 +100,11 @@ public class PasswordResetServiceImpl implements PasswordResetService {
                 setPasswordResponseCode("R00");
 
             }
+            logger.debug("Debug log message");
+            logger.info("Info log message");
+            logger.error("Error log message");
+            logger.warn("Warn log message");
+            logger.trace("Trace log message");
         }catch (Exception e){
             System.out.println("An error occurred while processing your request: " + e.getMessage());
         }

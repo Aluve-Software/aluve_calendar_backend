@@ -6,7 +6,6 @@ import org.springframework.stereotype.Component;
 import tech.aluve.calendar.entity.User;
 import javax.naming.AuthenticationException;
 import java.util.Date;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class JwtToken {
@@ -24,9 +23,10 @@ public class JwtToken {
 
     public String createToken(User user){
         Claims claims = Jwts.claims().setSubject(user.getEmail());
-        Date tokenCreateTime = new Date();
-        Date tokenValidity = new Date(tokenCreateTime.getTime() + TimeUnit.MINUTES.toMillis(accessTokenValidity));
+        Date tokenCreateTime = new Date(System.currentTimeMillis());
+        Date tokenValidity = new Date(tokenCreateTime.getTime() + accessTokenValidity);
         return Jwts.builder()
+                .setIssuedAt(tokenCreateTime)
                 .setClaims(claims)
                 .setExpiration(tokenValidity)
                 .signWith(SignatureAlgorithm.HS256, secret_key)
