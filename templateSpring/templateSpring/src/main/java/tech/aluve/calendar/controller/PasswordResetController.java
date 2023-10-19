@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import tech.aluve.calendar.service.PasswordResetServiceImpl;
 import tech.aluve.calendar.validator.ResponseMessage;
-import javax.naming.AuthenticationException;
 
 @RestController
 @RequestMapping("/passwordreset")
@@ -24,7 +23,7 @@ public class PasswordResetController {
     }
 
     @GetMapping("/verifytoken")
-    public ResponseMessage validateToken(@RequestParam("token")String userToken) throws AuthenticationException {
+    public ResponseMessage validateToken(@RequestParam("token")String userToken){
         passwordResetServiceImpl.validateToken(userToken);
         responseMessage = new ResponseMessage(passwordResetServiceImpl.getPasswordResponseCode(), passwordResetServiceImpl.getPasswordResponseMessage());
         return responseMessage;

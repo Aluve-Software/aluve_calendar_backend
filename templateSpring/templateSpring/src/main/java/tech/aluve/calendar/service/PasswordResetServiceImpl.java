@@ -1,5 +1,6 @@
 package tech.aluve.calendar.service;
 
+import io.jsonwebtoken.ExpiredJwtException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,7 +13,6 @@ import tech.aluve.calendar.interfaces.PasswordResetService;
 import tech.aluve.calendar.repository.UserRepository;
 import tech.aluve.calendar.security.JwtToken;
 import tech.aluve.calendar.validator.PasswordValidator;
-import javax.naming.AuthenticationException;
 
 @Service("PasswordResetServiceImpl")
 public class PasswordResetServiceImpl implements PasswordResetService {
@@ -46,12 +46,11 @@ public class PasswordResetServiceImpl implements PasswordResetService {
             if(userRepository.existsByEmail(userEmail)){
                 User user = userRepository.findByEmail(userEmail);
                 String newToken = token.createToken(user);
-                setUserEmail(userEmail);
                 user.setEmail(userEmail);
                 SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
                 simpleMailMessage.setTo(user.getEmail());
                 simpleMailMessage.setSubject("Pending password reset");
-                simpleMailMessage.setText("Click on link to reset your password!"+schemeName+"://"+serverName+"/passwordreset/verifytoken?token="+newToken);
+                simpleMailMessage.setText("Click on link to reset your password!"+schemeName+"://"+serverName+":8080"+"/passwordreset/verifytoken?token="+newToken);
                 emailService.sendEmail(simpleMailMessage);
                 //Setting message and code
                 setPasswordResponseMessage("Successfully Authenticated!");
@@ -73,13 +72,16 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     }
 
     @Override
-    public void validateToken(String userToken) throws AuthenticationException {
-        if(!token.validateClaims(userToken)){
-            setPasswordResponseMessage("Token has Expired");
+    public void validateToken(String userToken){
+        try {
+            if(token.validateClaims(userToken)){
+                setUserEmail(token.getEmail(userToken));
+                setPasswordResponseMessage("Token Valid and Redirected to password reset page");
+                setPasswordResponseCode("R00");
+            }
+        }catch (ExpiredJwtException exp){
+            setPasswordResponseMessage("Token Expired!");
             setPasswordResponseCode("R01");
-        }else {
-            setPasswordResponseMessage("Token Valid and Redirected to password reset page");
-            setPasswordResponseCode("R00");
         }
 
     }
@@ -88,18 +90,25 @@ public class PasswordResetServiceImpl implements PasswordResetService {
     public void resetPassword(String newPass, String confirmPass){
         try {
             passwordValidator = new PasswordValidator();
-            User user = userRepository.findByEmail(getUserEmail());
-            if (!passwordValidator.passwordValid(newPass) || !passwordValidator.Passwordsmatch(newPass, confirmPass, user)
-                    || passwordValidator.passwordNull(newPass, confirmPass)) {
-                setPasswordResponseMessage("Password not valid");
-                setPasswordResponseCode("R01");
-            }else {
-                user.setPassword(passwordEncoder.encode(newPass));
-                userRepository.save(user);
-                setPasswordResponseMessage("Password successfully updated");
-                setPasswordResponseCode("R00");
 
+            if(getUserEmail() != null){
+                User user = userRepository.findByEmail(getUserEmail());
+                if (!passwordValidator.passwordValid(newPass) || !passwordValidator.Passwordsmatch(newPass, confirmPass, user)
+                        || passwordValidator.passwordNull(newPass, confirmPass)) {
+                    setPasswordResponseMessage("Password not valid");
+                    setPasswordResponseCode("R01");
+                }else {
+                    user.setPassword(passwordEncoder.encode(newPass));
+                    userRepository.save(user);
+                    setPasswordResponseMessage("Password successfully updated");
+                    setPasswordResponseCode("R00");
+
+                }
+            }else {
+                setPasswordResponseMessage("Email not registered!");
+                setPasswordResponseCode("R01");
             }
+
             logger.debug("Debug log message");
             logger.info("Info log message");
             logger.error("Error log message");

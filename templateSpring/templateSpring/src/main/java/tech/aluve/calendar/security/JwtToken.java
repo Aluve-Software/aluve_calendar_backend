@@ -4,7 +4,6 @@ import io.jsonwebtoken.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.stereotype.Component;
 import tech.aluve.calendar.entity.User;
-import javax.naming.AuthenticationException;
 import java.util.Date;
 
 @Component
@@ -61,20 +60,12 @@ public class JwtToken {
         return null;
     }
 
-    public boolean validateClaims(String token) throws AuthenticationException {
-        try {
-            return parseJwtClaims(token).getExpiration().after(new Date());
-        }catch (ExpiredJwtException ex){
-            System.out.println("expired " +  ex.getMessage());
-            throw ex;
-        }catch (Exception ex){
-            System.out.println("invalid " + ex.getMessage());
-            throw ex;
-        }
+    public boolean validateClaims(String token){
+        return parseJwtClaims(token).getExpiration().after(new Date());
     }
 
-    public String getEmail(Claims claims) {
-        return claims.getSubject();
+    public String getEmail(String token) {
+        return parseJwtClaims(token).getSubject();
     }
 
 }
