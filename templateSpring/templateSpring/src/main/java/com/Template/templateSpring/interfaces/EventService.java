@@ -5,4 +5,8 @@ import com.Template.templateSpring.entity.Event;
 
 public interface EventService {
     Event createEvent(EventDTO eventDTO);
+
+    boolean isExists(Long id);
+
+    Event save(Event eventEntity);
 }

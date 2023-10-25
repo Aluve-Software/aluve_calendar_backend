@@ -41,7 +41,7 @@ public class EventServiceImpl implements EventService {
     private String responseMessage;
 
     public EventServiceImpl() {
-        
+
     }
 
     @Override
@@ -133,9 +133,9 @@ public class EventServiceImpl implements EventService {
                 public void run() {
                     //sendInvitationEmails(eventDTO);
                 }
-            });  
+            });
             t1.start();
-            
+
             setResponseMessage("Successfully created event!");
             setResponseCode("R00");
 
@@ -149,6 +149,18 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+    @Override
+    public boolean isExists(Long id) {
+        return eventRepository.existsById(id);
+    }
+
+    @Override
+    public Event save(Event eventEntity) {
+        //save guest
+
+        return eventRepository.save(eventEntity);
+    }
+
     public void setResponseMessage(String responseMessage) {
         this.responseMessage = responseMessage;
     }
@@ -158,18 +170,18 @@ public class EventServiceImpl implements EventService {
     }
 
     private void sendInvitationEmails(EventDTO eventDTO) {
-            //Sending email to all guests       
-            for (GuestDTO guestDTO : eventDTO.getGuests()) {
-                //check if the guest email is valid
-                if (emailValidator.validateEmail(guestDTO.getEmail())) {
-                    //if valid, create a guest object
-                    SimpleMailMessage mailMessage = new SimpleMailMessage();
-                    mailMessage.setTo(guestDTO.getEmail());
-                    mailMessage.setSubject("Invitation to " + eventDTO.getTitle());
-                    mailMessage.setText("You are invited to " + eventDTO.getTitle() + " on " + eventDTO.getDate() + " at " + eventDTO.getStartTime() + " to " + eventDTO.getEndTime() + " at " + eventDTO.getLocation() + " by " + eventDTO.getOrganizer());
-                    emailService.sendEmail(mailMessage);
-                }
+        //Sending email to all guests
+        for (GuestDTO guestDTO : eventDTO.getGuests()) {
+            //check if the guest email is valid
+            if (emailValidator.validateEmail(guestDTO.getEmail())) {
+                //if valid, create a guest object
+                SimpleMailMessage mailMessage = new SimpleMailMessage();
+                mailMessage.setTo(guestDTO.getEmail());
+                mailMessage.setSubject("Invitation to " + eventDTO.getTitle());
+                mailMessage.setText("You are invited to " + eventDTO.getTitle() + " on " + eventDTO.getDate() + " at " + eventDTO.getStartTime() + " to " + eventDTO.getEndTime() + " at " + eventDTO.getLocation() + " by " + eventDTO.getOrganizer());
+                emailService.sendEmail(mailMessage);
             }
+        }
     }
 
 }
