@@ -4,10 +4,12 @@ import com.Template.templateSpring.dto.EventDTO;
 import com.Template.templateSpring.entity.Event;
 import com.Template.templateSpring.mappers.Mapper;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
 public class EventMapperImpl implements Mapper<Event, EventDTO> {
+
 
     private ModelMapper modelMapper;
 

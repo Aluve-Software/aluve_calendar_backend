@@ -13,6 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 public class User {
     @Id
+    @Getter
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
     @Getter
