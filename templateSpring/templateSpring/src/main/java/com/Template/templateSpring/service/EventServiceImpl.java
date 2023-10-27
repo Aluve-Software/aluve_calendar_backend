@@ -149,6 +149,32 @@ public class EventServiceImpl implements EventService {
         }
     }
 
+
+    public Event partialUpdate(Long id, EventDTO eventDTO) {
+        // Retrieve the existing event
+        Optional<Event> existingEventOptional = eventRepository.findById(id);
+        if (existingEventOptional.isEmpty()) {
+            // Handle not found case
+        }
+
+        Event existingEvent = existingEventOptional.get();
+
+        // Apply partial updates to the existing event
+        if (eventDTO.getTitle() != null) {
+            existingEvent.setTitle(eventDTO.getTitle());
+        }
+        if (eventDTO.getDescription() != null) {
+            existingEvent.setDescription(eventDTO.getDescription());
+        }
+        // Add more fields as needed
+
+        // Save the updated event
+        Event updatedEvent = eventRepository.save(existingEvent);
+
+        return updatedEvent;
+    }
+
+
     @Override
     public boolean isExists(Long id) {
         return eventRepository.existsById(id);

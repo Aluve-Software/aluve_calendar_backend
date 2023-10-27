@@ -54,22 +54,7 @@ public class EventController {
         return responseMessage;
     }
 
-//    @PutMapping(path = "/{id}")
-//    public ResponseEntity<EventDTO> fullUpdateAuthor(
-//            @PathVariable("id") Long id,
-//            @RequestBody EventDTO eventDTO) {
-//
-//        if(!eventService.isExists(id)) {
-//            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-//        }
-//
-//        eventDTO.setId(id.toString());
-//        Event eventEntity = authorMapper.mapFrom(eventDTO);
-//        Event savedAuthorEntity = eventService.save(eventEntity);
-//        return new ResponseEntity<>(
-//                authorMapper.mapTo(savedAuthorEntity),
-//                HttpStatus.OK);
-//    }
+
 @PutMapping(path = "/{id}")
 public ResponseEntity<EventDTO> fullUpdateAuthor(@PathVariable("id") Long id, @Valid  @RequestBody EventDTO eventDTO) {
     if (!eventService.isExists(id)) {
@@ -159,6 +144,30 @@ public ResponseEntity<EventDTO> fullUpdateAuthor(@PathVariable("id") Long id, @V
 
     return new ResponseEntity<>(savedEventDTO, HttpStatus.OK);
 }
+
+    @PatchMapping(path = "/{id}")
+    public ResponseEntity<EventDTO> partialUpdateEvent(
+            @PathVariable("id") Long id,
+            @RequestBody EventDTO eventDTO) {
+        if (!eventService.isExists(id)) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        Event updatedEvent = eventService.partialUpdate(id, eventDTO);
+
+        // Map the updated Event entity back to EventDTO
+        EventDTO updatedEventDTO = eventMapper.mapTo(updatedEvent);
+        List<Guest> updatedGuestEntities = guestRepository.findByEvent(updatedEvent);
+        List<GuestDTO> guestDTOs = updatedGuestEntities.stream()
+                .map(guestMapper::mapTo)
+                .collect(Collectors.toList());
+        updatedEventDTO.setGuestEmails(guestDTOs);
+
+        updatedEventDTO.setOrganizer(updatedEvent.getUser().getId().longValue());
+
+        return new ResponseEntity<>(updatedEventDTO, HttpStatus.OK);
+    }
+
 
 
 }
