@@ -13,6 +13,7 @@ import com.Template.templateSpring.service.EmailService;
 import com.Template.templateSpring.service.EventServiceImpl;
 import com.Template.templateSpring.service.ResponseMessage;
 
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -70,7 +71,7 @@ public class EventController {
 //                HttpStatus.OK);
 //    }
 @PutMapping(path = "/{id}")
-public ResponseEntity<EventDTO> fullUpdateAuthor(@PathVariable("id") Long id, @RequestBody EventDTO eventDTO) {
+public ResponseEntity<EventDTO> fullUpdateAuthor(@PathVariable("id") Long id, @Valid  @RequestBody EventDTO eventDTO) {
     if (!eventService.isExists(id)) {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
