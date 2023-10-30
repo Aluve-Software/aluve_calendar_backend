@@ -17,8 +17,10 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(MockitoExtension.class)
 public class EventServiceTest {
@@ -202,5 +204,29 @@ public class EventServiceTest {
         // then
         assertThat(event).isNull();
     }
+
+//    @Test
+//    public void testPartialUpdate() {
+//        // Arrange
+//        Long eventId = 1L;
+//        EventDTO eventDTO = new EventDTO();
+//        eventDTO.setTitle("New Title");
+//        Event existingEvent = new Event();
+//        existingEvent.setId(Math.toIntExact(eventId));
+//        existingEvent.setTitle("Old Title");
+//
+//        Mockito.when(eventRepository.findById(eventId)).thenReturn(Optional.of(existingEvent));
+//        Mockito.when(eventRepository.save(existingEvent)).thenReturn(existingEvent);
+//
+//        // Act
+//        Event updatedEvent = eventService.partialUpdate(eventId, eventDTO);
+//
+//        // Assert
+//        // Verify that the event has been updated with the new title
+//        assertEquals("New Title", updatedEvent.getTitle());
+//
+//        // Verify that the save method was called
+//        Mockito.verify(eventRepository, Mockito.times(1)).save(existingEvent);
+//    }
 
 }

@@ -6,6 +6,7 @@ import com.Template.templateSpring.entity.Event;
 import com.Template.templateSpring.entity.Guest;
 import com.Template.templateSpring.entity.User;
 import com.Template.templateSpring.interfaces.EventService;
+import com.Template.templateSpring.mappers.Mapper;
 import com.Template.templateSpring.repository.EventRepository;
 import com.Template.templateSpring.repository.GuestRepository;
 import com.Template.templateSpring.repository.UserRepository;
@@ -17,7 +18,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.stereotype.Service;
 
+import java.lang.reflect.Field;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service("EventServiceImpl")
 public class EventServiceImpl implements EventService {
@@ -27,7 +31,14 @@ public class EventServiceImpl implements EventService {
     @Autowired
     private GuestRepository guestRepository;
     @Autowired
+    private GuestServiceImpl guestService;
+    @Autowired
+    private Mapper<Event, EventDTO> eventMapper;
+    @Autowired
+    private  Mapper<Guest,GuestDTO> guestMapper;
+
     @Setter
+    @Autowired
     private UserRepository userRepository;
 
     private EmailValidator emailValidator;
@@ -158,15 +169,28 @@ public class EventServiceImpl implements EventService {
         }
 
         Event existingEvent = existingEventOptional.get();
+        Field[] fields = eventDTO.getClass().getDeclaredFields();
+        for (Field field : fields) {
+            try {
+                // Set the field accessible so we can modify private fields if necessary
+                field.setAccessible(true);
 
-        // Apply partial updates to the existing event
-        if (eventDTO.getTitle() != null) {
-            existingEvent.setTitle(eventDTO.getTitle());
+                // Get the value from the DTO
+                Object value = field.get(eventDTO);
+
+                if (value != null) {
+                    // Find the corresponding field in the existing event
+                    Field existingField = existingEvent.getClass().getDeclaredField(field.getName());
+                    existingField.setAccessible(true);
+
+                    // Set the value of the existing event's field
+                    existingField.set(existingEvent, value);
+                }
+            } catch (NoSuchFieldException | IllegalAccessException e) {
+                // Handle any exceptions as needed
+                e.printStackTrace();
+            }
         }
-        if (eventDTO.getDescription() != null) {
-            existingEvent.setDescription(eventDTO.getDescription());
-        }
-        // Add more fields as needed
 
         // Save the updated event
         Event updatedEvent = eventRepository.save(existingEvent);
@@ -174,10 +198,30 @@ public class EventServiceImpl implements EventService {
         return updatedEvent;
     }
 
+    public EventDTO createAndUpdateDtoGenerationResponse(EventDTO eventDTO ,Event eventEntity){
+
+        //save Guest
+//        guestService.createAndUpdateGuest(eventDTO, eventEntity);
+
+        // Map the updated Event entity back to EventDTO
+        EventDTO updatedEventDTO = eventMapper.mapTo(eventEntity);
+        List<Guest> updatedGuestEntities = guestRepository.findByEvent( eventEntity);
+        List<GuestDTO> guestDTOs = updatedGuestEntities.stream()
+                .map(guestMapper::mapTo)
+                .collect(Collectors.toList());
+        updatedEventDTO.setGuestEmails(guestDTOs);
+
+        updatedEventDTO.setOrganizer(eventEntity.getUser().getId().longValue());
+        return  updatedEventDTO;
+    }
+
 
     @Override
     public boolean isExists(Long id) {
         return eventRepository.existsById(id);
+    }
+    public boolean isUserExists(Long id) {
+        return userRepository.existsById(id);
     }
 
     @Override

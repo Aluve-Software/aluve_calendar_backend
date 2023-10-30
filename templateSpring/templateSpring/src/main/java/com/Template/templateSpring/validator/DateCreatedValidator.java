@@ -1,4 +1,4 @@
-package com.Template.templateSpring.exceptions;
+package com.Template.templateSpring.validator;
 
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
