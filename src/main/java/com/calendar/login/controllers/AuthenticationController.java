@@ -1,5 +1,8 @@
-package com.calendar.login.auth;
+package com.calendar.login.controllers;
 
+import com.calendar.login.configuration.AuthenticationResponse;
+import com.calendar.login.dto.LoginDTO;
+import com.calendar.login.dto.RegistrationDTO;
 import com.calendar.login.service.AuthenticationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,7 +19,7 @@ public class AuthenticationController {
     private final AuthenticationService service;
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register (
-            @RequestBody RegisterRequest request
+            @RequestBody RegistrationDTO request
     ) {
         return ResponseEntity.ok(service.register(request));
 
@@ -24,7 +27,7 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> login (
-            @RequestBody AuthenticationRequest request
+            @RequestBody LoginDTO request
     ) {
         return ResponseEntity.ok(service.login(request));
     }

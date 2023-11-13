@@ -1,6 +1,5 @@
-package com.calendar.login.config;
+package com.calendar.login.configuration;
 
-import jakarta.servlet.Filter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

@@ -1,6 +1,6 @@
 package com.calendar.login.repository;
 
-import com.calendar.login.models.User;
+import com.calendar.login.entries.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package com.calendar.login.models;
+package com.calendar.login.entries;
 
 public enum Role {
     USER,

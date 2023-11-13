@@ -1,11 +1,11 @@
 package com.calendar.login.service;
 
-import com.calendar.login.auth.AuthenticationRequest;
-import com.calendar.login.auth.AuthenticationResponse;
-import com.calendar.login.auth.RegisterRequest;
-import com.calendar.login.config.JwtService;
-import com.calendar.login.models.Role;
-import com.calendar.login.models.User;
+import com.calendar.login.dto.LoginDTO;
+import com.calendar.login.configuration.AuthenticationResponse;
+import com.calendar.login.dto.RegistrationDTO;
+import com.calendar.login.configuration.JwtService;
+import com.calendar.login.entries.Role;
+import com.calendar.login.entries.User;
 import com.calendar.login.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -21,7 +21,7 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
-    public AuthenticationResponse register(RegisterRequest request) {
+    public AuthenticationResponse register(RegistrationDTO request) {
         var user = User.builder()
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(request.getPassword()))
@@ -34,7 +34,7 @@ public class AuthenticationService {
                 .token(jwtToken)
                 .build();
     }
-    public AuthenticationResponse login(AuthenticationRequest request) {
+    public AuthenticationResponse login(LoginDTO request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         request.getEmail(),

@@ -1,4 +1,4 @@
-package com.calendar.login.config;
+package com.calendar.login.configuration;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

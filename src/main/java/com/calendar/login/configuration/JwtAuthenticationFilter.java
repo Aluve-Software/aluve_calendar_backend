@@ -1,4 +1,4 @@
-package com.calendar.login.config;
+package com.calendar.login.configuration;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
